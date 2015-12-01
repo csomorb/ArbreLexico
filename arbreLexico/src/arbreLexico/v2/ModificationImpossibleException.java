@@ -3,6 +3,11 @@ package arbreLexico.v2;
 public class ModificationImpossibleException extends
 		ArbreLexicographiqueException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public ModificationImpossibleException() {
 		// TODO Auto-generated constructor stub
 	}

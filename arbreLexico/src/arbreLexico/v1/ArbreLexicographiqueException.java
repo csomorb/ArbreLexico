@@ -2,6 +2,11 @@ package arbreLexico.v1;
 
 public class ArbreLexicographiqueException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public ArbreLexicographiqueException() {
 		// TODO Auto-generated constructor stub
 	}
