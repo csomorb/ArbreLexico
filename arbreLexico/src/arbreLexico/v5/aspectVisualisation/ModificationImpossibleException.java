@@ -1,4 +1,4 @@
-package arbreLexico.v5.AspectSerialisation;
+package arbreLexico.v5.aspectVisualisation;
 
 public class ModificationImpossibleException extends
 		ArbreLexicographiqueException {

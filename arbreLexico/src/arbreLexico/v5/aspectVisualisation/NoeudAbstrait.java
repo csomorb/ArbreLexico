@@ -1,4 +1,4 @@
-package arbreLexico.v5.AspectSerialisation;
+package arbreLexico.v5.aspectVisualisation;
 
 public abstract class NoeudAbstrait {
 	protected NoeudAbstrait frere;

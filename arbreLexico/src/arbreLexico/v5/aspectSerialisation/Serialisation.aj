@@ -1,4 +1,4 @@
-package arbreLexico.v5.AspectSerialisation;
+package arbreLexico.v5.aspectSerialisation;
 
 import java.io.BufferedReader;
 import java.io.File;

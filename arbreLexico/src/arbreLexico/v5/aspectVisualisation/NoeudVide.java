@@ -1,4 +1,4 @@
-package arbreLexico.v5.AspectSerialisation;
+package arbreLexico.v5.aspectVisualisation;
 
 public class NoeudVide extends NoeudAbstrait {
 	
