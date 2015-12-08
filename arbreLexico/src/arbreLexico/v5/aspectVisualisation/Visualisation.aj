@@ -26,49 +26,41 @@ public aspect Visualisation {
 	}
 	
 	//Methodes pour treemodel
-	@Override
 	public void ArbreLexicographique.addTreeModelListener(TreeModelListener l) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public Object ArbreLexicographique.getChild(Object parent, int index) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public int ArbreLexicographique.getChildCount(Object parent) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
 	public int ArbreLexicographique.getIndexOfChild(Object parent, Object child) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
 	public Object ArbreLexicographique.getRoot() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public boolean ArbreLexicographique.isLeaf(Object node) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public void ArbreLexicographique.removeTreeModelListener(TreeModelListener l) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void ArbreLexicographique.valueForPathChanged(TreePath path, Object newValue) {
 		// TODO Auto-generated method stub
 
@@ -76,43 +68,37 @@ public aspect Visualisation {
 	
 	//methodes pout treenode
 	
-	@Override
+	@SuppressWarnings("rawtypes")
 	public Enumeration NoeudAbstrait.children() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public boolean NoeudAbstrait.getAllowsChildren() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public TreeNode NoeudAbstrait.getChildAt(int arg0) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public int NoeudAbstrait.getChildCount() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
 	public int NoeudAbstrait.getIndex(TreeNode arg0) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
 	public TreeNode NoeudAbstrait.getParent() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public boolean NoeudAbstrait.isLeaf() {
 		// TODO Auto-generated method stub
 		return false;
