@@ -1,5 +1,7 @@
 package arbreLexico.v5.aspectVisualisation;
 
+import java.util.Enumeration;
+
 import javax.swing.JTree;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -74,5 +76,45 @@ public aspect Visualisation {
 	
 	//methodes pout treenode
 	
-	
+	@Override
+	public Enumeration NoeudAbstrait.children() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean NoeudAbstrait.getAllowsChildren() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public TreeNode NoeudAbstrait.getChildAt(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int NoeudAbstrait.getChildCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int NoeudAbstrait.getIndex(TreeNode arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public TreeNode NoeudAbstrait.getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean NoeudAbstrait.isLeaf() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
