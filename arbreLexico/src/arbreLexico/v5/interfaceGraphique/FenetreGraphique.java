@@ -1,4 +1,4 @@
-package arbreLexico.interfaceGraphique;
+package arbreLexico.v5.interfaceGraphique;
 
 import java.awt.EventQueue;
 
