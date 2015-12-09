@@ -21,7 +21,7 @@ public class FenetreGraphique {
 	private JFrame frame;
 	private JTextField textField;
 	private JMenuItem mntmQuiter;
-
+	private ArbreLexicographique arbre;
 	/**
 	 * Launch the application.
 	 */
@@ -52,7 +52,7 @@ public class FenetreGraphique {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		this.arbre = new ArbreLexicographique();
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
@@ -82,10 +82,37 @@ public class FenetreGraphique {
 		JToolBar toolBar = new JToolBar();
 		frame.getContentPane().add(toolBar, BorderLayout.NORTH);
 		
+		JLabel lblNewLabel = new JLabel("Barre d'\u00E9tat");
+		lblNewLabel.setForeground(Color.RED);
+		
 		JButton btnNewButton = new JButton("Ajouter");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(arbre.ajout(textField.getText())){
+					lblNewLabel.setText("Ajout du mot: "+textField.getText()+" effectue");
+					lblNewLabel.setForeground(Color.BLACK);
+				}
+				else{
+					lblNewLabel.setText("L'ajout n'a pas ete effectue");
+					lblNewLabel.setForeground(Color.RED);
+				}
+			}
+		});
 		toolBar.add(btnNewButton);
 		
 		JButton btnSupprimer = new JButton("Supprimer");
+		btnSupprimer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(arbre.suppr(textField.getText())){
+					lblNewLabel.setText("Suppression du mot: "+textField.getText()+" effectue");
+					lblNewLabel.setForeground(Color.BLACK);
+				}
+				else{
+					lblNewLabel.setText("La suppression n'a pas ete effectue");
+					lblNewLabel.setForeground(Color.RED);
+				}
+			}
+		});
 		toolBar.add(btnSupprimer);
 		
 		JButton btnChercher = new JButton("Chercher");
@@ -101,8 +128,7 @@ public class FenetreGraphique {
 		toolBar.add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblNewLabel = new JLabel("Barre d'\u00E9tat");
-		lblNewLabel.setForeground(Color.RED);
+		
 		frame.getContentPane().add(lblNewLabel, BorderLayout.SOUTH);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
