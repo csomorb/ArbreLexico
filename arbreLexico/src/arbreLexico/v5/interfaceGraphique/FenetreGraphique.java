@@ -116,9 +116,33 @@ public class FenetreGraphique {
 		toolBar.add(btnSupprimer);
 		
 		JButton btnChercher = new JButton("Chercher");
+		btnChercher.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(arbre.contient(textField.getText())){
+					lblNewLabel.setText("Le mot: "+textField.getText()+" est dans l'arbre");
+					lblNewLabel.setForeground(Color.BLACK);
+				}
+				else{
+					lblNewLabel.setText("Le mot n'est pas dans l'arbre");
+					lblNewLabel.setForeground(Color.RED);
+				}
+			}
+		});
 		toolBar.add(btnChercher);
 		
 		JButton btnPrefixe = new JButton("Prefixe");
+		btnPrefixe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(arbre.prefixe(textField.getText())){
+					lblNewLabel.setText("Le mot: "+textField.getText()+" est un prefixe");
+					lblNewLabel.setForeground(Color.BLACK);
+				}
+				else{
+					lblNewLabel.setText("Le mot n'est pas un prefixe");
+					lblNewLabel.setForeground(Color.RED);
+				}
+			}
+		});
 		toolBar.add(btnPrefixe);
 		
 		JLabel lblQuoi = new JLabel("Quoi");
