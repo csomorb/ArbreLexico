@@ -17,6 +17,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Color;
 import javax.swing.JTabbedPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 public class FenetreGraphique {
 
@@ -196,11 +201,38 @@ public class FenetreGraphique {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		
-		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.addTab("Arbre", null, tabbedPane_1, null);
+		JScrollPane scrollPane = new JScrollPane();
+		tabbedPane.addTab("Arbre", null, scrollPane, null);
 		
-		JTabbedPane tabbedPane_2 = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.addTab("Liste", null, tabbedPane_2, null);
+		JTree tree = new JTree();
+		tree.setModel(new DefaultTreeModel(
+			new DefaultMutableTreeNode("Arbre") {
+				{
+					DefaultMutableTreeNode node_1;
+					DefaultMutableTreeNode node_2;
+					node_1 = new DefaultMutableTreeNode("un noeud");
+						node_1.add(new DefaultMutableTreeNode("vide"));
+						node_1.add(new DefaultMutableTreeNode("vide"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("un autre noeud");
+						node_2 = new DefaultMutableTreeNode("un autre noeud");
+							node_2.add(new DefaultMutableTreeNode("vide"));
+						node_1.add(node_2);
+						node_1.add(new DefaultMutableTreeNode("a"));
+						node_1.add(new DefaultMutableTreeNode("c"));
+						node_1.add(new DefaultMutableTreeNode("d"));
+					add(node_1);
+				}
+			}
+		));
+		scrollPane.setViewportView(tree);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		tabbedPane.addTab("Liste", null, scrollPane_1, null);
+		
+		JTextPane txtpnHjkbhjhj = new JTextPane();
+		txtpnHjkbhjhj.setText("Liste des mots de l'arbre");
+		scrollPane_1.setViewportView(txtpnHjkbhjhj);
 	}
 
 }
