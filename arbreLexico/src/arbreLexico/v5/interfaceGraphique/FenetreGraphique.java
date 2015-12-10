@@ -85,6 +85,23 @@ public class FenetreGraphique {
 		mnFichier.add(mntmCharger);
 		
 		JMenuItem mntmSauvegarder = new JMenuItem("Sauvegarder");
+		mntmSauvegarder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser choix = new JFileChooser();
+				choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				choix.setMultiSelectionEnabled(false);
+				int retour=choix.showSaveDialog(null);
+				if(retour==JFileChooser.APPROVE_OPTION){
+				   // un fichier a été choisi (sortie par OK)
+				   arbre.sauve(choix.getSelectedFile().getAbsolutePath());
+				   lblNewLabel.setText("Arbre sauvegarde dans le fichier: "+choix.getSelectedFile().getName());
+				   lblNewLabel.setForeground(Color.BLACK);
+				}else{ // pas de fichier choisi
+					lblNewLabel.setText("Pas de fichier choisi pour la sauvegarde");
+					lblNewLabel.setForeground(Color.RED);
+				}
+			}
+		});
 		mnFichier.add(mntmSauvegarder);
 		
 		mntmQuiter = new JMenuItem("Quitter");
