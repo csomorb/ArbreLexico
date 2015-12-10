@@ -9,6 +9,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -59,7 +61,27 @@ public class FenetreGraphique {
 		JMenu mnFichier = new JMenu("Fichier");
 		menuBar.add(mnFichier);
 		
+		JLabel lblNewLabel = new JLabel("Barre d'\u00E9tat");
+		lblNewLabel.setForeground(Color.RED);
+		
 		JMenuItem mntmCharger = new JMenuItem("Charger");
+		mntmCharger.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser choix = new JFileChooser();
+				choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				choix.setMultiSelectionEnabled(false);
+				int retour=choix.showOpenDialog(null);
+				if(retour==JFileChooser.APPROVE_OPTION){
+				   // un fichier a été choisi (sortie par OK)
+				   arbre.charge(choix.getSelectedFile().getAbsolutePath());
+				   lblNewLabel.setText("Arbre charge dpuis le fichier: "+choix.getSelectedFile().getName());
+				   lblNewLabel.setForeground(Color.BLACK);
+				}else{ // pas de fichier choisi
+					lblNewLabel.setText("Pas de fichier choisi");
+					lblNewLabel.setForeground(Color.RED);
+				}
+			}
+		});
 		mnFichier.add(mntmCharger);
 		
 		JMenuItem mntmSauvegarder = new JMenuItem("Sauvegarder");
@@ -82,8 +104,7 @@ public class FenetreGraphique {
 		JToolBar toolBar = new JToolBar();
 		frame.getContentPane().add(toolBar, BorderLayout.NORTH);
 		
-		JLabel lblNewLabel = new JLabel("Barre d'\u00E9tat");
-		lblNewLabel.setForeground(Color.RED);
+		
 		
 		JButton btnNewButton = new JButton("Ajouter");
 		btnNewButton.addActionListener(new ActionListener() {
