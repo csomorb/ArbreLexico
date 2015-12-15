@@ -19,10 +19,21 @@ public aspect Visualisation {
 	
 	private DefaultMutableTreeNode NoeudAbstrait.defaultMutableTreeNode;
 	
-	private JTree ArbreLexicographique.vue;
+//	private JTree ArbreLexicographique.vue;
+	public JTree ArbreLexicographique.vue;
 	
 	public void ArbreLexicographique.setVue(JTree jt){
 		// classe à appeler depuis l'interface graphique pour afficher la JTree
+		this.vue = jt;
+	}
+	
+	// modification du constructeur de la classe arbrelexicographique 
+	pointcut constructeurArbre(ArbreLexicographique arbre) : execution(ArbreLexicographique.new()) && target (arbre);
+	
+	after(ArbreLexicographique arbre) : constructeurArbre(arbre){
+		arbre.entree.defaultMutableTreeNode = new DefaultMutableTreeNode("");
+		arbre.defaultTreeModel = new DefaultTreeModel(arbre.entree.defaultMutableTreeNode);
+		arbre.vue = new JTree(arbre.defaultTreeModel);
 	}
 	
 	//Methodes pour treemodel
@@ -66,7 +77,7 @@ public aspect Visualisation {
 	}
 
 	public boolean NoeudAbstrait.getAllowsChildren() {
-		return this.defaultMutableTreeNode.;
+		return this.defaultMutableTreeNode.getAllowsChildren();
 	}
 
 	public TreeNode NoeudAbstrait.getChildAt(int arg0) {

@@ -77,7 +77,7 @@ public class FenetreGraphique {
 				choix.setMultiSelectionEnabled(false);
 				int retour=choix.showOpenDialog(null);
 				if(retour==JFileChooser.APPROVE_OPTION){
-				   // un fichier a été choisi (sortie par OK)
+				   // un fichier a ï¿½tï¿½ choisi (sortie par OK)
 				   arbre.charge(choix.getSelectedFile().getAbsolutePath());
 				   lblNewLabel.setText("Arbre charge dpuis le fichier: "+choix.getSelectedFile().getName());
 				   lblNewLabel.setForeground(Color.BLACK);
@@ -97,7 +97,7 @@ public class FenetreGraphique {
 				choix.setMultiSelectionEnabled(false);
 				int retour=choix.showSaveDialog(null);
 				if(retour==JFileChooser.APPROVE_OPTION){
-				   // un fichier a été choisi (sortie par OK)
+				   // un fichier a ï¿½tï¿½ choisi (sortie par OK)
 				   arbre.sauve(choix.getSelectedFile().getAbsolutePath());
 				   lblNewLabel.setText("Arbre sauvegarde dans le fichier: "+choix.getSelectedFile().getName());
 				   lblNewLabel.setForeground(Color.BLACK);
@@ -205,6 +205,9 @@ public class FenetreGraphique {
 		tabbedPane.addTab("Arbre", null, scrollPane, null);
 		
 		JTree tree = new JTree();
+		
+		arbre.setVue(tree);
+		/*
 		tree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Arbre") {
 				{
@@ -224,7 +227,7 @@ public class FenetreGraphique {
 					add(node_1);
 				}
 			}
-		));
+		));*/
 		scrollPane.setViewportView(tree);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
