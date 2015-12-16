@@ -21,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class FenetreGraphique {
@@ -203,8 +204,10 @@ public class FenetreGraphique {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		tabbedPane.addTab("Arbre", null, scrollPane, null);
-		
-		JTree tree = new JTree();
+	 	
+
+		DefaultMutableTreeNode racine1 = new DefaultMutableTreeNode("/") ;
+		JTree tree = new JTree(racine1,false);
 		
 		arbre.setVue(tree);
 		/*
@@ -212,7 +215,7 @@ public class FenetreGraphique {
 			new DefaultMutableTreeNode("Arbre") {
 				{
 					DefaultMutableTreeNode node_1;
-					DefaultMutableTreeNode node_2;
+					DefaulSZtMutableTreeNode node_2;
 					node_1 = new DefaultMutableTreeNode("un noeud");
 						node_1.add(new DefaultMutableTreeNode("vide"));
 						node_1.add(new DefaultMutableTreeNode("vide"));

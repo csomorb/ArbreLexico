@@ -26,16 +26,26 @@ public aspect Visualisation {
 		// classe à appeler depuis l'interface graphique pour afficher la JTree
 		this.vue = jt;
 	}
+
+	pointcut ajout(ArbreLexicographique arbre): call(boolean ArbreLexicographique.ajout(String)) && target (arbre);
+	after (ArbreLexicographique arbre) returning (boolean modifie):ajout(arbre){
+		if(modifie){
+			System.out.print("L'arbre a ete modifie");
+			DefaultMutableTreeNode tr = new DefaultMutableTreeNode("");  
+			
+			
+		}
+	}
 	
 	// modification du constructeur de la classe arbrelexicographique 
 	pointcut constructeurArbre(ArbreLexicographique arbre) : execution(ArbreLexicographique.new()) && target (arbre);
-	
+	 
 	after(ArbreLexicographique arbre) : constructeurArbre(arbre){
 		arbre.entree.defaultMutableTreeNode = new DefaultMutableTreeNode("");
 		arbre.defaultTreeModel = new DefaultTreeModel(arbre.entree.defaultMutableTreeNode);
 		arbre.vue = new JTree(arbre.defaultTreeModel);
 	}
-	
+
 	//Methodes pour treemodel
 	public void ArbreLexicographique.addTreeModelListener(TreeModelListener l) {
 		this.defaultTreeModel.addTreeModelListener(l);
