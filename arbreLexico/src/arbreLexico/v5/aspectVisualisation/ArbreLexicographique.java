@@ -1,7 +1,11 @@
 package arbreLexico.v5.aspectVisualisation;
 
+
+
 public class ArbreLexicographique {
+
 	NoeudAbstrait entree;
+
 
 	public ArbreLexicographique() {
 		entree = NoeudVide.getInstance();

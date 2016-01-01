@@ -30,6 +30,7 @@ public class FenetreGraphique {
 	private JTextField textField;
 	private JMenuItem mntmQuiter;
 	private ArbreLexicographique arbre;
+	private JTree tree;
 	/**
 	 * Launch the application.
 	 */
@@ -51,8 +52,13 @@ public class FenetreGraphique {
 	 */
 	public FenetreGraphique() {
 		initialize();
+		arbre.setVue(tree);
+		//tree.setModel(arbre);
+		
 	}
 
+	
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -206,10 +212,10 @@ public class FenetreGraphique {
 		tabbedPane.addTab("Arbre", null, scrollPane, null);
 	 	
 
-		DefaultMutableTreeNode racine1 = new DefaultMutableTreeNode("/") ;
-		JTree tree = new JTree(racine1,false);
+		//DefaultMutableTreeNode racine1 = new DefaultMutableTreeNode("/") ;
+		//JTree tree = new JTree(racine1,false);
+		//arbre.setVue(tree);
 		
-		arbre.setVue(tree);
 		/*
 		tree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Arbre") {
