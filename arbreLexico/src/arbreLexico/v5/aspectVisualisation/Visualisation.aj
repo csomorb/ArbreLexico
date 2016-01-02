@@ -11,8 +11,6 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.MutableTreeNode;
 
-
-
 public aspect Visualisation {
 	// declaration intertype indiquant que ArbreLexicographique implémente TreeModel et NoeudAbstrait implemente TreeNode
 /*	declare parents : ArbreLexicographique implements TreeModel;
@@ -55,7 +53,7 @@ public aspect Visualisation {
 	
 	pointcut constructeurArbre(ArbreLexicographique arbre) : target (arbre) && execution(ArbreLexicographique.new());
 	after(ArbreLexicographique arbre) : constructeurArbre(arbre){
-		arbre.defaultTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode());
+		//arbre.defaultTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode());
 		//arbre.entree.defaultMutableTreeNode = new DefaultMutableTreeNode("");
 		//arbre.defaultTreeModel = new DefaultTreeModel(arbre.entree.defaultMutableTreeNode);
 		//arbre.vue = new JTree(arbre.defaultTreeModel);
@@ -66,27 +64,60 @@ public aspect Visualisation {
 	after(ArbreLexicographique arbre) : ajoutArbre(arbre){
 		System.out.println("modification d'entrée");
 	}
-	// pour faire des test //
-	pointcut ajoutArbreLexicoTest(ArbreLexicographique arbre) : target (arbre) && execution(boolean ArbreLexicographique.ajout(String));
+	// si appel ArbreLexicographique.ajout
+	pointcut ajoutArbreLexicoTest(ArbreLexicographique arbre) : target(arbre) && execution(boolean ArbreLexicographique.ajout(String));
 	before(ArbreLexicographique arbre) : ajoutArbreLexicoTest(arbre){
 		System.out.println("appel modification d'entrée");
 	}
-	// si appel de ajout arbre et modification de entree, alors y'a eu un ajout donc on capture
-	pointcut ajoutArbreLexico(ArbreLexicographique arbre) : target (arbre) && ajoutArbre(ArbreLexicographique) && withincode(boolean ArbreLexicographique.ajout(String));
+	// si appel de ArbreLexicographique.ajout ET modification de la variable ArbreLexicographique.entree ALORS on advice
+	pointcut ajoutArbreLexico(ArbreLexicographique arbre) : target(arbre) && ajoutArbre(ArbreLexicographique) && withincode(boolean ArbreLexicographique.ajout(String));
 	after(ArbreLexicographique arbre) : ajoutArbreLexico(arbre){
 		System.out.println("ajout arbre lexicographique");
 	}
-	
-	pointcut supprArbre(ArbreLexicographique arbre) : target (arbre) && execution(boolean ArbreLexicographique.suppr(String));
+	// si appel de ArbreLexicographique.suppr ET modification de la variable ArbreLexicographique.entree ALORS on advice
+	pointcut supprArbre(ArbreLexicographique arbre) : target(arbre) && ajoutArbre(ArbreLexicographique) && withincode(boolean ArbreLexicographique.suppr(String));
 	after(ArbreLexicographique arbre) : supprArbre(arbre){
 		System.out.println("suppression arbre lexicographique");
 	}
 	
+	// ==== POINTCUT - NoeudAbstrait frere ==== //	
+	//test sur la modification du frere
+	pointcut modificationFrere(NoeudAbstrait noeudAbstrait) : this(noeudAbstrait) && set(NoeudAbstrait NoeudAbstrait.frere);
+	// si NoeudAbstrait.ajout ET modfication du frere
+	pointcut AjoutFrere(NoeudAbstrait noeudAbstrait) : target(noeudAbstrait) && modificationFrere(NoeudAbstrait) && withincode(NoeudAbstrait NoeudAbstrait.ajout(String));	
+	after(NoeudAbstrait noeudAbstrait) : AjoutFrere(noeudAbstrait){
+		System.out.println("Ajout d'un frere");
+	}
+	// si NoeudAbstrait.suppr ET modfication du frere
+	pointcut supprFrere(NoeudAbstrait noeudAbstrait) : target(noeudAbstrait) && modificationFrere(NoeudAbstrait) && withincode(NoeudAbstrait NoeudAbstrait.suppr(String));	
+	after(NoeudAbstrait noeudAbstrait) : supprFrere(noeudAbstrait){
+		System.out.println("suppression d'un frere");
+	}
+	
+	// ==== POINTCUT - Noeud fils ==== //	
+	//test si modification du fils
+	pointcut modificationFils(Noeud noeud) : this(noeud) && set(NoeudAbstrait Noeud.fils);
+	// si Noeud.ajout ET Modification fils
+	pointcut ajoutFils(Noeud noeud) : target(noeud) && modificationFils(Noeud) && withincode(NoeudAbstrait Noeud.ajout(String));	
+	after(Noeud noeud) : ajoutFils(noeud){
+		System.out.println("Ajout d'un fils");
+	}
+	pointcut supprFils(Noeud noeud) : target(noeud) && modificationFils(Noeud) && withincode(NoeudAbstrait Noeud.suppr(String));	
+	after(Noeud noeud) : supprFils(noeud){
+		System.out.println("suppression d'un fils");
+	}
+	
+	
+	
+	
+	
+	// == constucteur Marque == //
 	pointcut constructeurMarque(Marque marque, NoeudAbstrait frere) : target (marque) && args(frere) && execution(Marque.new(NoeudAbstrait));
 	after(Marque marque, NoeudAbstrait frere) : constructeurMarque(marque, frere){
 		System.out.println("ajout marque");
 	} 
 	
+	// == constructeur Noeud == //
 	pointcut ConstructeurNoeud(Noeud nouveauNoeud, NoeudAbstrait frere, NoeudAbstrait fils, char valeur) : target (nouveauNoeud) && args(frere, fils, valeur) && execution(Noeud.new(NoeudAbstrait , NoeudAbstrait , char));
 	after(Noeud nouveauNoeud, NoeudAbstrait frere, NoeudAbstrait fils, char valeur) : ConstructeurNoeud(nouveauNoeud, frere, fils, valeur){
 		System.out.println("ajout noeud");
