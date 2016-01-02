@@ -52,9 +52,6 @@ public class FenetreGraphique {
 	 */
 	public FenetreGraphique() {
 		initialize();
-		arbre.setVue(tree);
-		//tree.setModel(arbre);
-		
 	}
 
 	
@@ -132,9 +129,7 @@ public class FenetreGraphique {
 		
 		JToolBar toolBar = new JToolBar();
 		frame.getContentPane().add(toolBar, BorderLayout.NORTH);
-		
-		
-		
+	
 		JButton btnNewButton = new JButton("Ajouter");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -211,17 +206,18 @@ public class FenetreGraphique {
 		JScrollPane scrollPane = new JScrollPane();
 		tabbedPane.addTab("Arbre", null, scrollPane, null);
 	 	
+		// ======================JTREE========================//
 
-		//DefaultMutableTreeNode racine1 = new DefaultMutableTreeNode("/") ;
-		//JTree tree = new JTree(racine1,false);
-		//arbre.setVue(tree);
+		DefaultMutableTreeNode racine1 = new DefaultMutableTreeNode("/") ;
+		JTree tree = new JTree(racine1,false);
+		arbre.setVue(tree);
+		tree.setModel(arbre);
 		
-		/*
-		tree.setModel(new DefaultTreeModel(
+		/*tree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Arbre") {
 				{
 					DefaultMutableTreeNode node_1;
-					DefaulSZtMutableTreeNode node_2;
+					DefaultMutableTreeNode node_2;
 					node_1 = new DefaultMutableTreeNode("un noeud");
 						node_1.add(new DefaultMutableTreeNode("vide"));
 						node_1.add(new DefaultMutableTreeNode("vide"));

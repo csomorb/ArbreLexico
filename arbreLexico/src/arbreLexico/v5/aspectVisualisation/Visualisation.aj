@@ -9,7 +9,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import javax.swing.tree.MutableTreeNode;
 
 public aspect Visualisation {
 	// declaration intertype indiquant que ArbreLexicographique implémente TreeModel et NoeudAbstrait implemente TreeNode
@@ -37,6 +36,19 @@ public aspect Visualisation {
 		}
 	}*/
 	
+	/*pointcut constructeurArbre(ArbreLexicographique arbre) : execution(ArbreLexicographique.new()) && target (arbre);
+	after(ArbreLexicographique arbre) : constructeurArbre(arbre){
+		//arbre.defaultTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode());
+		//arbre.entree.defaultMutableTreeNode = new DefaultMutableTreeNode("");
+		//arbre.defaultTreeModel = new DefaultTreeModel(arbre.entree.defaultMutableTreeNode);
+		//arbre.vue = new JTree(arbre.defaultTreeModel);
+		
+		arbre.entree.defaultMutableTreeNode = new DefaultMutableTreeNode("");
+		arbre.defaultTreeModel = new DefaultTreeModel(arbre.entree.defaultMutableTreeNode);
+		
+		System.out.println("creation arbreLexico");
+	}*/
+	
 	// == ArbreLexicographique - Attributs == //
 	declare parents : ArbreLexicographique implements TreeModel;
 	private DefaultTreeModel ArbreLexicographique.defaultTreeModel;
@@ -50,29 +62,39 @@ public aspect Visualisation {
 	public void ArbreLexicographique.setVue(JTree jt){
 		this.vue = jt;
 	}
-	
-	pointcut constructeurArbre(ArbreLexicographique arbre) : target (arbre) && execution(ArbreLexicographique.new());
+
+	// ==== POINTCUT - ArbreLexicographique arbre ==== //	
+	pointcut constructeurArbre(ArbreLexicographique arbre) : execution(ArbreLexicographique.new()) && target (arbre);
 	after(ArbreLexicographique arbre) : constructeurArbre(arbre){
 		//arbre.defaultTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode());
 		//arbre.entree.defaultMutableTreeNode = new DefaultMutableTreeNode("");
 		//arbre.defaultTreeModel = new DefaultTreeModel(arbre.entree.defaultMutableTreeNode);
 		//arbre.vue = new JTree(arbre.defaultTreeModel);
+		
+		DefaultMutableTreeNode racine = new DefaultMutableTreeNode("");
+		arbre.defaultTreeModel = new DefaultTreeModel(racine);
+		
 		System.out.println("creation arbreLexico");
 	}
+	
 	// si modification de la variable ArbreLexicographique.entree, on capture sans rien faire
 	pointcut ajoutArbre(ArbreLexicographique arbre) : this(arbre) && set(NoeudAbstrait ArbreLexicographique.entree);
 	after(ArbreLexicographique arbre) : ajoutArbre(arbre){
-		System.out.println("modification d'entrée");
+		System.out.println("modification - ArbreLexicographique.entree");
 	}
 	// si appel ArbreLexicographique.ajout
-	pointcut ajoutArbreLexicoTest(ArbreLexicographique arbre) : target(arbre) && execution(boolean ArbreLexicographique.ajout(String));
+	/*pointcut ajoutArbreLexicoTest(ArbreLexicographique arbre) : target(arbre) && execution(boolean ArbreLexicographique.ajout(String));
 	before(ArbreLexicographique arbre) : ajoutArbreLexicoTest(arbre){
 		System.out.println("appel modification d'entrée");
-	}
+	}*/
 	// si appel de ArbreLexicographique.ajout ET modification de la variable ArbreLexicographique.entree ALORS on advice
 	pointcut ajoutArbreLexico(ArbreLexicographique arbre) : target(arbre) && ajoutArbre(ArbreLexicographique) && withincode(boolean ArbreLexicographique.ajout(String));
 	after(ArbreLexicographique arbre) : ajoutArbreLexico(arbre){
-		System.out.println("ajout arbre lexicographique");
+		System.out.println("modification ArbreLexicographique");
+		DefaultMutableTreeNode nouvelleRacine = new DefaultMutableTreeNode();
+		nouvelleRacine = (DefaultMutableTreeNode)arbre.defaultTreeModel.getRoot();
+		nouvelleRacine.insert(arbre.entree.defaultMutableTreeNode, 0);
+		arbre.defaultTreeModel.reload();
 	}
 	// si appel de ArbreLexicographique.suppr ET modification de la variable ArbreLexicographique.entree ALORS on advice
 	pointcut supprArbre(ArbreLexicographique arbre) : target(arbre) && ajoutArbre(ArbreLexicographique) && withincode(boolean ArbreLexicographique.suppr(String));
@@ -86,8 +108,14 @@ public aspect Visualisation {
 	// si NoeudAbstrait.ajout ET modfication du frere
 	pointcut AjoutFrere(NoeudAbstrait noeudAbstrait) : target(noeudAbstrait) && modificationFrere(NoeudAbstrait) && withincode(NoeudAbstrait NoeudAbstrait.ajout(String));	
 	after(NoeudAbstrait noeudAbstrait) : AjoutFrere(noeudAbstrait){
+		if(noeudAbstrait.getParent() != null){
+			DefaultMutableTreeNode noeudFrere = noeudAbstrait.frere.defaultMutableTreeNode;
+			((DefaultMutableTreeNode)noeudAbstrait.getParent()).insert(noeudFrere, 0);
+		}
+		//DefaultMutableTreeNode getPreviousNode()
 		System.out.println("Ajout d'un frere");
 	}
+	
 	// si NoeudAbstrait.suppr ET modfication du frere
 	pointcut supprFrere(NoeudAbstrait noeudAbstrait) : target(noeudAbstrait) && modificationFrere(NoeudAbstrait) && withincode(NoeudAbstrait NoeudAbstrait.suppr(String));	
 	after(NoeudAbstrait noeudAbstrait) : supprFrere(noeudAbstrait){
@@ -95,32 +123,41 @@ public aspect Visualisation {
 	}
 	
 	// ==== POINTCUT - Noeud fils ==== //	
+	/*	pointcut testfils(Noeud n, String s) : target (n) && args(s) && call(NoeudAbstrait NoeudAbstrait.ajout(String));	
+	after(Noeud n, String s) : testfils(n,s){
+		System.out.println("test - val : "+s);
+	}*/
 	//test si modification du fils
-	pointcut modificationFils(Noeud noeud) : this(noeud) && set(NoeudAbstrait Noeud.fils);
+	pointcut modificationFils(Noeud noeud, NoeudAbstrait n1) : this(noeud) && target(n1) && set(NoeudAbstrait Noeud.fils);
 	// si Noeud.ajout ET Modification fils
-	pointcut ajoutFils(Noeud noeud) : target(noeud) && modificationFils(Noeud) && withincode(NoeudAbstrait Noeud.ajout(String));	
+	pointcut ajoutFils(Noeud noeud) : target(noeud) && modificationFils(Noeud, NoeudAbstrait) && withincode(NoeudAbstrait NoeudAbstrait.ajout(String));	
 	after(Noeud noeud) : ajoutFils(noeud){
-		System.out.println("Ajout d'un fils");
+	//	noeud.defaultMutableTreeNode.add();	
+		System.out.println("Creation d'un nouveau fils ");
+	//	DefaultMutableTreeNode nouveauFils = new DefaultMutableTreeNode(thisJoinPoint.getArgs()[0]);
+		noeud.defaultMutableTreeNode.add(noeud.getFils().defaultMutableTreeNode);	
 	}
-	pointcut supprFils(Noeud noeud) : target(noeud) && modificationFils(Noeud) && withincode(NoeudAbstrait Noeud.suppr(String));	
+	
+	pointcut supprFils(Noeud noeud) : target(noeud) && modificationFils(Noeud, NoeudAbstrait) && withincode(NoeudAbstrait Noeud.suppr(String));	
 	after(Noeud noeud) : supprFils(noeud){
 		System.out.println("suppression d'un fils");
 	}
 	
-	
-	
-	
-	
 	// == constucteur Marque == //
 	pointcut constructeurMarque(Marque marque, NoeudAbstrait frere) : target (marque) && args(frere) && execution(Marque.new(NoeudAbstrait));
 	after(Marque marque, NoeudAbstrait frere) : constructeurMarque(marque, frere){
-		System.out.println("ajout marque");
+		marque.defaultMutableTreeNode = new DefaultMutableTreeNode();
+		System.out.println("création marque");
 	} 
 	
 	// == constructeur Noeud == //
 	pointcut ConstructeurNoeud(Noeud nouveauNoeud, NoeudAbstrait frere, NoeudAbstrait fils, char valeur) : target (nouveauNoeud) && args(frere, fils, valeur) && execution(Noeud.new(NoeudAbstrait , NoeudAbstrait , char));
 	after(Noeud nouveauNoeud, NoeudAbstrait frere, NoeudAbstrait fils, char valeur) : ConstructeurNoeud(nouveauNoeud, frere, fils, valeur){
-		System.out.println("ajout noeud");
+		nouveauNoeud.defaultMutableTreeNode = new DefaultMutableTreeNode(valeur);					// creer un noeud avec valeur
+		DefaultMutableTreeNode NoeudFils = fils.defaultMutableTreeNode;								
+		nouveauNoeud.defaultMutableTreeNode.add(NoeudFils);											// ajout du fils 
+		//DefaultMutableTreeNode NoeudFrere = fils.frere.defaultMutableTreeNode;					// si y'a un frere, on l'ajoute
+		System.out.println("création noeud - valeur : "+valeur);
 	}
 	
 	// modification du constructeur de la classe arbrelexicographique 

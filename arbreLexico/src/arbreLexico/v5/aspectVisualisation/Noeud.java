@@ -76,4 +76,7 @@ public class Noeud extends NoeudAbstrait {
 		return fils.toString(prefixe + valeur) + frere.toString(prefixe);
 	}
 
+	public NoeudAbstrait getFils(){
+		return fils;
+	}
 }
