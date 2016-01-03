@@ -66,7 +66,8 @@ public aspect Visualisation {
 			((DefaultMutableTreeNode)arbre.defaultTreeModel.getRoot()).insert(arbre.entree.defaultMutableTreeNode, 0);
 		}
 		arbre.defaultTreeModel.reload();
-		derouleArbre(arbre.vue, (DefaultMutableTreeNode)arbre.entree.defaultMutableTreeNode.getRoot(), 0);
+		if(arbre.entree != NoeudVide.getInstance())
+			derouleArbre(arbre.vue, (DefaultMutableTreeNode)arbre.entree.defaultMutableTreeNode.getRoot(), 0);
 		System.out.println("suppression arbre lexicographique");
 	}
 	
