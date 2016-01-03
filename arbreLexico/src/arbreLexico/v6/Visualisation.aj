@@ -37,6 +37,7 @@ public aspect Visualisation {
 	// si modification de la variable ArbreLexicographique.entree, on capture sans rien faire
 	pointcut ajoutArbre(ArbreLexicographique arbre) : this(arbre) && set(NoeudAbstrait ArbreLexicographique.entree);
 	after(ArbreLexicographique arbre) : ajoutArbre(arbre){
+		//int a = derouleArbre(arbre.vue, (DefaultMutableTreeNode)arbre.entree.defaultMutableTreeNode.getRoot(), 0);
 		System.out.println("modification - ArbreLexicographique.entree");
 	}
 	// si appel de ArbreLexicographique.ajout ET modification de la variable ArbreLexicographique.entree ALORS on advice
@@ -48,6 +49,9 @@ public aspect Visualisation {
 		nouvelleRacine = (DefaultMutableTreeNode)arbre.defaultTreeModel.getRoot();
 		nouvelleRacine.insert(arbre.entree.defaultMutableTreeNode, 0);
 		arbre.defaultTreeModel.reload();
+		derouleArbre(arbre.vue, (DefaultMutableTreeNode)arbre.entree.defaultMutableTreeNode.getRoot(), 0);
+		
+
 	}
 	// si appel de ArbreLexicographique.suppr ET modification de la variable ArbreLexicographique.entree ALORS on advice
 	pointcut supprArbre(ArbreLexicographique arbre) : target(arbre) && ajoutArbre(ArbreLexicographique) && withincode(boolean ArbreLexicographique.suppr(String));
@@ -62,6 +66,7 @@ public aspect Visualisation {
 			((DefaultMutableTreeNode)arbre.defaultTreeModel.getRoot()).insert(arbre.entree.defaultMutableTreeNode, 0);
 		}
 		arbre.defaultTreeModel.reload();
+		derouleArbre(arbre.vue, (DefaultMutableTreeNode)arbre.entree.defaultMutableTreeNode.getRoot(), 0);
 		System.out.println("suppression arbre lexicographique");
 	}
 	
@@ -190,4 +195,22 @@ public aspect Visualisation {
 	public boolean NoeudAbstrait.isLeaf() {
 		return this.defaultMutableTreeNode.isLeaf();
 	}
+	// retourne le nombre total de noeud
+	public int countNode(DefaultMutableTreeNode node, int nbr){
+		if(!(node.isLeaf())){
+			nbr++;
+			for(int i=0; i<node.getChildCount(); i++){
+				nbr = nbr + countNode((DefaultMutableTreeNode)node.getChildAt(i), nbr);
+			}
+		}
+		return nbr;
+	}
+	// deroule l'arbre passé en Paramètre
+	public void derouleArbre(JTree tree, DefaultMutableTreeNode node, int posNoeud){
+		int nombreNoeud = countNode(node, 0);
+		for(int i =0; i<=nombreNoeud; i++){
+			tree.expandRow(i);
+		}
+	}
+	
 }
