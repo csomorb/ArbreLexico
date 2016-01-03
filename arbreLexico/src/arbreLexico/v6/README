@@ -1,0 +1,45 @@
+Projet Arbre Lexicographique - Master IC2A - M1 WIC
+
+réalissé par :	- Barnabas Csomor
+				- Garnesson pierre
+				
+Le projet est a lancer dans la classe 'FenetreGraphique.java'
+
+I) Les classes
+
+	- ArbreLexicographique.java	: classe AbreLexicographique
+	- NoeudAbstrait.java : classe abstraite NoeudAbstrait 
+	- Marque.java : classe Marque extend NoeudAbstrait
+	- Noeud.java : classe Noeud extend NoeudAbstrait
+	- NoeudVide.java : classe NoeudVide extend NoeudAbstrait - Singleton : il existe qu'une seule instance de la classe NoeudVidee
+	- ArbreLexicographiqueException.java
+	- ModificationImpossibleException.java
+	
+	- FenetreGraphique.java : Contient l'interface de l'application
+	
+	- Serialisation.aj : Contient les aspects Serialisation qui rende la classse ArbreLexicographique serialisable
+	- Visualisation.aj : Contient les aspects visualisation, mettant à jour l'arbre affiché a l'utilisateur
+	
+II)  Fonctionnalités :
+
+	- Fichier :
+		- Charger 		: charge un arbre 
+		- Sauvgarder 	: Sauvgarde l'arbre généré dans un fichier
+		- Quitter 		: 
+
+	- Ajouter 	: Ajoute le mot écrit dans le champs de recherche dans l'arbre.
+				  Résultats possibles : "Ajout du mot: XXXXX effectue" - "L'ajout n'a pas ete effectue"
+				  
+	- Supprimer : Supprime le mot écrit dans le champs de recherche de l'arbre.
+				  Résultats possibles : "Suppression du mot: XXXXX effectue" - "La suppression n'a pas ete effectue"
+				  
+	- Chercher 	: Recherche si le mot écrit dans le champs de recherche est présent dans l'arbre.
+				  ferme tous les autres noeuds si le mot recherché est présent
+				  Résultats possibles : "Le mot: XXXXX est dans l'arbre" - "Le mot n'est pas dans l'arbre"
+				  
+	- Prefixe 	: Recherche le mot écrit dans le champs de recherche est un prefixe.
+				  Résultats possibles : "Le mot: XXXXX est un prefixe" - "Le mot n'est pas un prefixe"
+				  
+	- Ouvrir	: Ouvre tous les noeuds de l'arbre
+	
+	- Quoi ?	: Champs de recherche

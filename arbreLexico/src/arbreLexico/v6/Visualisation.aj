@@ -12,6 +12,8 @@ import javax.swing.tree.TreePath;
 
 public aspect Visualisation {
 
+	TreePath parentPath;
+	
 	// == ArbreLexicographique - Attributs == //
 	declare parents : ArbreLexicographique implements TreeModel;
 	private DefaultTreeModel ArbreLexicographique.defaultTreeModel;
@@ -32,26 +34,23 @@ public aspect Visualisation {
 		// On créer une racine, avec un noeud.
 		DefaultMutableTreeNode racine = new DefaultMutableTreeNode("");						
 		arbre.defaultTreeModel = new DefaultTreeModel(racine);
-		System.out.println("creation arbreLexico");
+		//System.out.println("creation arbreLexico");
 	}
 	// si modification de la variable ArbreLexicographique.entree, on capture sans rien faire
 	pointcut ajoutArbre(ArbreLexicographique arbre) : this(arbre) && set(NoeudAbstrait ArbreLexicographique.entree);
 	after(ArbreLexicographique arbre) : ajoutArbre(arbre){
-		//int a = derouleArbre(arbre.vue, (DefaultMutableTreeNode)arbre.entree.defaultMutableTreeNode.getRoot(), 0);
-		System.out.println("modification - ArbreLexicographique.entree");
+		//System.out.println("modification - ArbreLexicographique.entree");
 	}
 	// si appel de ArbreLexicographique.ajout ET modification de la variable ArbreLexicographique.entree ALORS on advice
 	pointcut ajoutArbreLexico(ArbreLexicographique arbre) : target(arbre) && ajoutArbre(ArbreLexicographique) && withincode(boolean ArbreLexicographique.ajout(String));
 	after(ArbreLexicographique arbre) : ajoutArbreLexico(arbre){
-		System.out.println("modification ArbreLexicographique");
+		//System.out.println("modification ArbreLexicographique");
 		// On créer une nouvelle racine en passsant par un TreeModel et on recharge
 		DefaultMutableTreeNode nouvelleRacine = new DefaultMutableTreeNode();
 		nouvelleRacine = (DefaultMutableTreeNode)arbre.defaultTreeModel.getRoot();
 		nouvelleRacine.insert(arbre.entree.defaultMutableTreeNode, 0);
 		arbre.defaultTreeModel.reload();
 		derouleArbre(arbre.vue, (DefaultMutableTreeNode)arbre.entree.defaultMutableTreeNode.getRoot(), 0);
-		
-
 	}
 	// si appel de ArbreLexicographique.suppr ET modification de la variable ArbreLexicographique.entree ALORS on advice
 	pointcut supprArbre(ArbreLexicographique arbre) : target(arbre) && ajoutArbre(ArbreLexicographique) && withincode(boolean ArbreLexicographique.suppr(String));
@@ -68,7 +67,7 @@ public aspect Visualisation {
 		arbre.defaultTreeModel.reload();
 		if(arbre.entree != NoeudVide.getInstance())
 			derouleArbre(arbre.vue, (DefaultMutableTreeNode)arbre.entree.defaultMutableTreeNode.getRoot(), 0);
-		System.out.println("suppression arbre lexicographique");
+		//System.out.println("suppression arbre lexicographique");
 	}
 	
 	// ==== POINTCUT - NoeudAbstrait frere ==== //	
@@ -79,7 +78,6 @@ public aspect Visualisation {
 			DefaultMutableTreeNode noeudFrere = noeudAbstrait.frere.defaultMutableTreeNode;
 			((DefaultMutableTreeNode)noeudAbstrait.getParent()).insert(noeudFrere, 0);
 		}
-		System.out.println("Ajout d'un frere");
 	}
 	// si NoeudAbstrait.suppr ET modfication du frere
 	pointcut supprFrere(NoeudAbstrait noeudAbstrait) : target(noeudAbstrait) && withincode(NoeudAbstrait NoeudAbstrait.suppr(String)) && set(NoeudAbstrait NoeudAbstrait.frere);	
@@ -92,14 +90,18 @@ public aspect Visualisation {
 		if(noeudAbstrait.frere != NoeudVide.getInstance()){
 			((DefaultMutableTreeNode)noeudAbstrait.getParent()).insert(noeudAbstrait.frere.defaultMutableTreeNode, 0);
 		}
-		System.out.println("suppression d'un frere");
 	}
 	
-	// ==== POINTCUT - Noeud fils ==== //	
+	// ==== POINTCUT - Noeud fils ==== //
+	
+	// Noeud.GetFils();
+	// Nous n'avons pas réussit a récupérer le Noeud.Fils ou l'arguments (String) passé lors de ça création : "advice defined in arbreLexico has not been applied [advice did not match]"
+	// Pour continuer le projet, nous avons donc choisi d'utiliser un getter pour pouvoir acceder au fils (noeud.getFils())
+	
 	// si Noeud.ajout ET Modification fils
 	pointcut ajoutFils(Noeud noeud) : target(noeud) && withincode(NoeudAbstrait NoeudAbstrait.ajout(String)) && set(NoeudAbstrait Noeud.fils);	
 	after(Noeud noeud) : ajoutFils(noeud){
-		System.out.println("Creation d'un nouveau fils ");
+		//System.out.println("Creation d'un nouveau fils ");
 		noeud.defaultMutableTreeNode.add(noeud.getFils().defaultMutableTreeNode);	
 	}
 	// si Noeud.suppr ET Modification fils
@@ -109,14 +111,14 @@ public aspect Visualisation {
 	}
 	after(Noeud noeud) : supprFils(noeud){
 		if(noeud.getFils() != NoeudVide.getInstance()) noeud.defaultMutableTreeNode.add(noeud.getFils().defaultMutableTreeNode);
-		System.out.println("suppression d'un fils");
+		//System.out.println("suppression d'un fils");
 	}
 	
 	// == constucteur Marque == //
 	pointcut constructeurMarque(Marque marque, NoeudAbstrait frere) : target (marque) && args(frere) && execution(Marque.new(NoeudAbstrait));
 	after(Marque marque, NoeudAbstrait frere) : constructeurMarque(marque, frere){
 		marque.defaultMutableTreeNode = new DefaultMutableTreeNode();
-		System.out.println("création marque");
+		//System.out.println("création marque");
 	} 
 	
 	// == constructeur Noeud == //
@@ -125,7 +127,33 @@ public aspect Visualisation {
 		nouveauNoeud.defaultMutableTreeNode = new DefaultMutableTreeNode(valeur);					// creer un noeud avec valeur
 		DefaultMutableTreeNode NoeudFils = fils.defaultMutableTreeNode;								
 		nouveauNoeud.defaultMutableTreeNode.add(NoeudFils);											// ajout du fils 
-		System.out.println("création noeud - valeur : "+valeur);
+		//System.out.println("création noeud - valeur : "+valeur);
+	}
+	// ouvre l'arbre
+	pointcut OuvreArbre(ArbreLexicographique arbre) : args(arbre) && call(void FenetreGraphique.test(ArbreLexicographique));
+	after(ArbreLexicographique arbre) : OuvreArbre(arbre){
+		if(arbre.entree != NoeudVide.getInstance())
+			derouleArbre(arbre.vue, (DefaultMutableTreeNode)arbre.entree.defaultMutableTreeNode.getRoot(), 0);
+	}
+	
+	pointcut arbreContient(ArbreLexicographique arbre) : target (arbre) && execution(boolean ArbreLexicographique.contient(String));
+	after(ArbreLexicographique arbre) returning(boolean result) : arbreContient(arbre){
+		if(result){
+			fermeArbre(arbre.vue, (DefaultMutableTreeNode)arbre.entree.defaultMutableTreeNode.getRoot(),0);
+			arbre.vue.collapsePath(parentPath);
+			//System.out.println("result2");
+		}
+	}
+	pointcut noeudContient(NoeudAbstrait noeud) : target (noeud) && execution(boolean NoeudAbstrait.contient(String));
+	after(NoeudAbstrait noeud):noeudContient(noeud){
+	}
+	
+	pointcut marqueContient(NoeudAbstrait noeud) : target (noeud) && execution(boolean Marque.contient(String));
+	after(NoeudAbstrait noeud)returning(boolean result):marqueContient(noeud){
+		if(result){
+			parentPath = new TreePath(noeud.defaultMutableTreeNode.getPath());
+			//System.out.println("result");
+		}
 	}
 	
 	//======================================================================================//
@@ -211,6 +239,13 @@ public aspect Visualisation {
 		int nombreNoeud = countNode(node, 0);
 		for(int i =0; i<=nombreNoeud; i++){
 			tree.expandRow(i);
+		}
+	}
+	// deroule l'arbre passé en Paramètre
+	public void fermeArbre(JTree tree, DefaultMutableTreeNode node, int posNoeud){
+		int nombreNoeud = countNode(node, 0);
+		for(int i =nombreNoeud; i>=0; i--){
+			tree.collapseRow(i);
 		}
 	}
 	

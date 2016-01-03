@@ -20,8 +20,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class FenetreGraphique {
@@ -189,7 +187,13 @@ public class FenetreGraphique {
 			}
 		});
 		toolBar.add(btnPrefixe);
-		
+		JButton btnOpen = new JButton("Ouvrir");
+		btnOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				test(arbre);
+			}
+		});
+		toolBar.add(btnOpen);
 		JLabel lblQuoi = new JLabel("Quoi");
 		toolBar.add(lblQuoi);
 		
@@ -241,6 +245,9 @@ public class FenetreGraphique {
 		JTextPane txtpnHjkbhjhj = new JTextPane();
 		txtpnHjkbhjhj.setText("Liste des mots de l'arbre");
 		scrollPane_1.setViewportView(txtpnHjkbhjhj);
+	}
+	public void test(ArbreLexicographique arbre){
+		
 	}
 
 }
