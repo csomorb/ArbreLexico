@@ -13,6 +13,7 @@ import javax.swing.tree.TreePath;
 public aspect Visualisation {
 
 	TreePath parentPath;
+	boolean pathCheck = false; //booleen qui permet d'ordonner les pointcuts lors de la recherche d'un mot
 	
 	// == ArbreLexicographique - Attributs == //
 	declare parents : ArbreLexicographique implements TreeModel;
@@ -137,6 +138,9 @@ public aspect Visualisation {
 	}
 	
 	pointcut arbreContient(ArbreLexicographique arbre) : target (arbre) && execution(boolean ArbreLexicographique.contient(String));
+	before(ArbreLexicographique arbre) : arbreContient(arbre){
+		pathCheck = false;
+	}
 	after(ArbreLexicographique arbre) returning(boolean result) : arbreContient(arbre){
 		if(result){
 			fermeArbre(arbre.vue, (DefaultMutableTreeNode)arbre.entree.defaultMutableTreeNode.getRoot(),0);
@@ -150,8 +154,9 @@ public aspect Visualisation {
 	
 	pointcut marqueContient(NoeudAbstrait noeud) : target (noeud) && execution(boolean Marque.contient(String));
 	after(NoeudAbstrait noeud)returning(boolean result):marqueContient(noeud){
-		if(result){
+		if((result)&& !(pathCheck)){
 			parentPath = new TreePath(noeud.defaultMutableTreeNode.getPath());
+			pathCheck=true;
 			//System.out.println("result");
 		}
 	}
